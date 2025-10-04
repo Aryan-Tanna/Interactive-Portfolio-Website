@@ -1,0 +1,58 @@
+
+#app-container {
+  width: 60vw;
+  height: 30vh;
+  left: 150px;
+  top: 200px;
+
+  grid-column: 3/4;
+  grid-row: 1/2;
+}
+
+/* Base style for the title element */
+.text-pressure-title {
+  /* CSS variables for dynamic colors from JS */
+  --text-color: #ffffff;
+  --stroke-color: #ff0000;
+text-indent: 7px;
+  margin: 0;
+  width: 50%;
+  text-transform: uppercase;
+  text-align: right;
+  font-weight: 2000;
+  white-space: wrap;
+  user-select: none;
+  transform-origin: right top; /* For vertical scaling */
+}
+
+/* Style for when flexbox layout is enabled */
+.text-pressure-title.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Individual character span styling */
+.text-pressure-title span {
+  display: inline-block;
+  color: var(--text-color);
+}
+
+/* Stroke effect styles */
+.text-pressure-title.stroke span {
+  position: relative;
+  /* The main text color is handled by the pseudo-element's stroke */
+  color: transparent;
+}
+.text-pressure-title.stroke span::after{
+  font-weight: 2444;
+}
+.text-pressure-title.stroke span::after {
+  content: attr(data-char);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--text-color);
+  z-index: -1;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: var(--stroke-color);
+}

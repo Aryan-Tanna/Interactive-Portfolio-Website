@@ -1,0 +1,25 @@
+.wrapper {
+        
+       
+        padding-left: 5vw;
+      }
+      
+      /* Styles for the text container */
+      .decrypted-text-container {
+        font-family:monospace bold;
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 700;
+        color: aliceblue;
+        line-height: 1.7;
+        white-space: pre-wrap; /* Preserve spaces and line breaks */
+      }
+
+      /* Style for the characters that are still scrambled */
+      .encrypted-char {
+        color: aliceblue; /* Make scrambled characters a different color */
+        opacity: 0.8;
+      }
+
+      /* A spacer to create room for scrolling */
+   

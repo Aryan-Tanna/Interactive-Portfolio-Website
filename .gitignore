@@ -1,0 +1,67 @@
+# OS junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Env and local secrets
+.env
+.env.*.local
+
+# Dependency directories (add if you use a bundler or tooling)
+node_modules/
+bower_components/
+
+# Build outputs
+dist/
+build/
+out/
+public/build/
+public/dist/
+
+# Caches
+.cache/
+.parcel-cache/
+.sass-cache/
+.eslintcache
+.stylelintcache
+.vscode-test/
+coverage/
+
+# Framework-specific (keep if you ever add these tools)
+.next/
+.vercel/
+.nuxt/
+.netlify/
+functions/.netlify/
+
+# Testing artifacts
+cypress/videos/
+cypress/screenshots/
+playwright-report/
+test-results/
+
+# Editors/IDE
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+.idea/
+*.iml
+
+# Misc temporary files
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+
+# Mac archive metadata
+*.zip~
+*.tar.gz~

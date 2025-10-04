@@ -1,0 +1,49 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Keep Windows-specific scripts CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Treat these as text (ensure diffs)
+*.html text
+*.css  text
+*.js   text
+*.mjs  text
+*.ts   text
+*.tsx  text
+*.json text
+*.md   text
+*.svg  text
+
+# Images and binaries (no diffs)
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.ttf  binary
+*.otf  binary
+*.woff binary
+*.woff2 binary
+*.mp4  binary
+*.mov  binary
+
+# Lockfiles: favor current branch during merges
+package-lock.json merge=ours
+yarn.lock         merge=ours
+pnpm-lock.yaml    merge=ours
+
+# Minified assets: treat as binary to avoid noisy diffs
+*.min.js  -diff
+*.min.css -diff
+
+# Vendor and build outputs: mark as vendored for GitHub Linguist
+vendor/** linguist-vendored
+dist/**   linguist-vendored
+build/**  linguist-vendored
+
+# Docs: mark as documentation for Linguist
+docs/**   linguist-documentation

@@ -1,0 +1,27 @@
+  /* Wrapper to position the content */
+      .content-wrapper {
+          /* MODIFIED: Pushed the container down to allow for scrolling */
+          margin-top: 5vh;
+          padding: 1vw; /* Added padding for spacing */
+          font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+          padding-left: 5vw;
+          box-sizing: border-box;
+      }
+      
+      /* --- ScrollFloat Text Styles --- */
+      .scroll-float {
+        overflow: visible; /* Allow characters to animate from outside */
+        text-align: left; /* Align text to the left */
+      }
+      .scroll-float-text {
+     
+
+        color: aliceblue;
+        display: inline-block;
+        font-size: clamp(1.1rem, 6vw, 6rem);
+        font-weight: 900;
+        line-height: 1.2;
+      }
+      .char {
+        display: inline-block;
+      }

@@ -1,0 +1,49 @@
+How the Light Rays Got Resolved
+The Core Problem
+The main issue was OGL (the WebGL library) wasn't loading properly in the browser, which prevented the light rays shader from rendering.
+
+Why OGL Wasn't Loading
+1. CDN Version Mismatch
+Initially tried: https://cdn.jsdelivr.net/npm/ogl@0.0.41/dist/ogl.min.js
+Problem: This version doesn't have a pre-built browser bundle in the dist folder
+Modern OGL versions (1.x) only ship ES module source files, not browser-ready UMD/IIFE bundles
+2. Script Loading Order Issues
+Used defer attribute on both OGL and background.js
+Problem: With defer, scripts execute in order but asynchronously after DOM loads. Sometimes 
+background.js
+ ran before OGL's global was available
+This caused: window.OGL is undefined
+3. ES Module Import Issues
+Downloaded ogl.js from esm.sh which was an ES module
+Problem: ES modules use import/export syntax which doesn't work in regular <script> tags
+Caused: Uncaught SyntaxError: Unexpected token 'export'
+4. Local File Import Problems
+The downloaded ES module tried to import dependencies from CDN URLs
+Problem: Browser tried to resolve relative imports, leading to 404 errors like /ogl@0.0.94/es2022/ogl.mjs
+The Final Solution
+What Worked:
+html
+<script type="module">
+  import { Renderer, Program, Triangle, Mesh } from 'https://cdn.skypack.dev/ogl';
+  
+  // All light rays code inline here...
+</script>
+Why This Worked:
+Skypack CDN (cdn.skypack.dev)
+Automatically converts npm packages to browser-compatible ES modules
+Resolves all dependencies correctly
+Works reliably without local files
+Inline ES Module
+<script type="module"> tells browser to treat code as ES module
+Can use import statements directly
+No separate file loading issues
+Single Execution Context
+Everything runs in one script block
+No timing/order issues between files
+OGL classes available immediately after import
+Key Lessons
+Modern libraries often don't ship browser bundles anymore (only ES modules for bundlers)
+CDN choice matters: Skypack, esm.sh work for ES modules; jsDelivr/unpkg need specific versions with pre-built bundles
+ES modules in browser: Use <script type="module"> and import from CDN URLs that support it
+Inline code can be simpler than managing multiple file dependencies when CDN access is unreliable
+The light rays now work because OGL loads correctly from Skypack CDN as an ES module, and all the shader/rendering code executes immediately after in the same module scope.
