@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             animationSize:32,
             ballCount: 15,
             clumpFactor: 1,
-            cursorBallSize: 1.5,
+            cursorBallSize: 1.4,
             enableTransparency: true,
         };
         // --- Helpers ---

@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const techData = [
                 { category: 'Languages', skills: [
                     { name: 'HTML', icon: '🌐' }, { name: 'CSS', icon: '🎨' }, { name: 'JavaScript', icon: 'JS' },
-                    { name: 'Node.js', icon: '🟢' }, { name: 'Express.js', icon: '🚀' }, { name: 'C++', icon: 'C++' },
+                    { name: 'Node.js', icon: '🟢' }, { name: 'Express.js', icon: '🚀' },, { name: 'C', icon: 'C' }, { name: 'C++', icon: 'C++' },
                     { name: 'Java', icon: '☕' }, { name: 'Python', icon: '🐍' }
                 ]},
                 { category: 'Tools/Frameworks', skills: [

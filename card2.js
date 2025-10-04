@@ -16,7 +16,7 @@
                     // MODIFIED: Animation now completes over a scroll distance
                     // equal to the viewport height, leaving time for the
                     // final state to be visible while scrolling continues.
-                    end: '+=100%',
+                    end: '+=80%',
                     scrub: 1,
                     pin: true,
                 }

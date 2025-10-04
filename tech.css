@@ -10,7 +10,7 @@
       .tech-stack-section {
         position: relative; user-select: none; padding: 2rem;
        width: 100%; z-index: 2;
-        height: 100vh;
+        min-height: 100vh;
         background-color: #111620a9;
         will-change: transform;
         padding-top: 20vh;
