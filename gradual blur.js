@@ -12,9 +12,9 @@
                 position: 'bottom', 
                 height: '8rem', // Increased height
                 target: 'page', 
-                strength: 3, 
+                strength: 2, 
                 animated: 'scroll',
-                divCount: 15, // Increased divCount for a smoother gradient
+                divCount: 25, // Increased divCount for a smoother gradient
                 curve: 'ease-in'
             }
         };

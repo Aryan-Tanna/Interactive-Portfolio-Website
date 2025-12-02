@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Folder Animation</title>
+    <style>
+        :root {
+            --folder-color: #6A35FF;
+            --folder-back-color: #4220a0;
+            --paper-1: #c5b3ff;
+            --paper-2: #d8ccff;
+            --paper-3: #ebe6ff;
+            --magnet-x: 0px;
+            --magnet-y: 0px;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a1a2e;
+            font-family: system-ui, sans-serif;
+            overflow: hidden;
+        }
+
+        .folder-wrapper {
+            transform-style: preserve-3d;
+        }
+
+        .folder {
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            position: relative;
+        }
+
+        /* --- REVERTED: Split-Flap Hover/Click Animation --- */
+
+        /* 1. Hover State (Not Open) */
+        .folder:not(.open):hover {
+            transform: translateY(-8px);
+        }
+        .folder:not(.open):hover .paper {
+            transform: translate(-50%, 0%);
+        }
+        .folder:not(.open):hover .folder__front {
+            transform: skew(15deg) scaleY(0.6);
+        }
+        .folder:not(.open):hover .folder__front.right {
+            transform: skew(-15deg) scaleY(0.6);
+        }
+        
+        /* 2. Open State (After Click) */
+        .folder.open {
+            transform: translateY(-8px);
+        }
+        .folder.open .paper-1 {
+            transform: translate(calc(-120% + var(--magnet-x)), calc(-70% + var(--magnet-y))) rotateZ(-15deg);
+        }
+        .folder.open .paper-2 {
+            transform: translate(calc(10% + var(--magnet-x)), calc(-70% + var(--magnet-y))) rotateZ(15deg);
+        }
+        .folder.open .paper-3 {
+            transform: translate(calc(-50% + var(--magnet-x)), calc(-100% + var(--magnet-y))) rotateZ(5deg);
+        }
+        .folder.open .paper:hover {
+             transform: var(--transform-open) scale(1.05);
+        }
+        .folder.open .folder__front {
+            transform: skew(15deg) scaleY(0.6);
+        }
+        .folder.open .folder__front.right {
+            transform: skew(-15deg) scaleY(0.6);
+        }
+        
+        /* --- FOLDER STRUCTURE --- */
+        .folder__back {
+            position: relative;
+            width: 100px;
+            height: 80px;
+            background: var(--folder-back-color);
+            border-radius: 0px 10px 10px 10px;
+        }
+        .folder__back::after {
+            position: absolute;
+            z-index: 0;
+            bottom: 98%;
+            left: 0;
+            content: '';
+            width: 30px;
+            height: 10px;
+            background: var(--folder-back-color);
+            border-radius: 5px 5px 0 0;
+        }
+
+        .paper {
+            position: absolute;
+            z-index: 2;
+            bottom: 10%;
+            left: 50%;
+            transform: translate(-50%, 10%);
+            width: 85%;
+            height: 75%;
+            border-radius: 10px;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 10px;
+            color: #333;
+        }
+        .paper-1 {
+            background-color: var(--paper-1);
+        }
+        .paper-2 {
+            background-color: var(--paper-2);
+        }
+        .paper-3 {
+            background-color: var(--paper-3);
+        }
+
+        .folder__front {
+            position: absolute;
+            z-index: 4;
+            width: 100%;
+            height: 100%;
+            background: var(--folder-color);
+            border-radius: 5px 10px 10px 5px;
+            transform-origin: bottom;
+            transition: transform 0.3s ease-in-out;
+        }
+      
+    </style>
+</head>
+<body>
+
+    <div id="folder-container" class="folder-wrapper"></div>
+    
+    <script>
+    class Folder {
+        constructor(containerSelector, config = {}) {
+            this.container = document.querySelector(containerSelector);
+            if (!this.container) return;
+
+            this.config = { color: '#6A35FF', size: 2.5, items: [], ...config };
+            this.isOpen = false;
+            this.papers = [];
+            this.init();
+        }
+
+        setColors() {
+            const baseColor = this.config.color;
+            const lighten = (hex, percent) => {
+                let color = hex.slice(1);
+                const num = parseInt(color, 16);
+                let r = (num >> 16) & 0xff; let g = (num >> 8) & 0xff; let b = num & 0xff;
+                r = Math.min(255, Math.round(r * (1 + percent)));
+                g = Math.min(255, Math.round(g * (1 + percent)));
+                b = Math.min(255, Math.round(b * (1 + percent)));
+                return '#' + (g | (b << 8) | (r << 16) | (1 << 24)).toString(16).slice(1).toUpperCase();
+            };
+            this.folderEl.style.setProperty('--folder-color', "#5227FF");
+            this.folderEl.style.setProperty('--folder-back-color', "#401FCC");
+            this.folderEl.style.setProperty('--paper-3', "#f2f2f2");
+            this.folderEl.style.setProperty('--paper-2', "#ffffff");
+            this.folderEl.style.setProperty('--paper-1', "#e6e6e6");
+        }
+
+        init() {
+            const wrapper = document.createElement('div');
+            wrapper.style.transform = `scale(${this.config.size})`;
+
+            this.folderEl = document.createElement('div');
+            this.folderEl.className = 'folder';
+            
+            const folderBack = document.createElement('div');
+            folderBack.className = 'folder__back';
+            
+            const folderFrontL = document.createElement('div');
+            folderFrontL.className = 'folder__front';
+            const folderFrontR = document.createElement('div');
+            folderFrontR.className = 'folder__front right';
+
+            this.setColors();
+
+            const paperItems = this.config.items.slice(0, 3);
+            while (paperItems.length < 3) paperItems.push('');
+            
+            paperItems.forEach((itemContent, i) => {
+                const paper = document.createElement('div');
+                paper.className = `paper paper-${i + 1}`;
+                paper.innerHTML = itemContent;
+                folderBack.appendChild(paper);
+                this.papers[i] = paper;
+            });
+            
+            folderBack.appendChild(folderFrontL);
+            folderBack.appendChild(folderFrontR);
+            this.folderEl.appendChild(folderBack);
+            wrapper.appendChild(this.folderEl);
+            this.container.appendChild(wrapper);
+
+            this.folderEl.addEventListener('click', () => this.toggle());
+
+            this.papers.forEach((paper, index) => {
+                paper.addEventListener('mousemove', e => this.handlePaperMouseMove(e, index));
+                paper.addEventListener('mouseleave', () => this.handlePaperMouseLeave(index));
+
+                const openTransforms = {
+                    1: `translate(calc(-120% + var(--magnet-x)), calc(-70% + var(--magnet-y))) rotateZ(-15deg)`,
+                    2: `translate(calc(10% + var(--magnet-x)), calc(-70% + var(--magnet-y))) rotateZ(15deg)`,
+                    3: `translate(calc(-50% + var(--magnet-x)), calc(-100% + var(--magnet-y))) rotateZ(5deg)`,
+                };
+                const openTransform = openTransforms[index + 1];
+                paper.style.setProperty(`--transform-open`, openTransform);
+                paper.style.setProperty('--transform-hover', `${openTransform} scale(1.05)`);
+            });
+        }
+
+        toggle() {
+            this.isOpen = !this.isOpen;
+            this.folderEl.classList.toggle('open', this.isOpen);
+            if (!this.isOpen) {
+                this.papers.forEach(paper => {
+                    paper.style.setProperty('--magnet-x', `0px`);
+                    paper.style.setProperty('--magnet-y', `0px`);
+                });
+            }
+        }
+
+        handlePaperMouseMove(e, index) {
+            if (!this.isOpen) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const offsetX = (e.clientX - (rect.left + rect.width / 2)) * 0.15;
+            const offsetY = (e.clientY - (rect.top + rect.height / 2)) * 0.15;
+            
+            this.papers[index].style.setProperty('--magnet-x', `${offsetX}px`);
+            this.papers[index].style.setProperty('--magnet-y', `${offsetY}px`);
+        }
+
+        handlePaperMouseLeave(index) {
+            this.papers[index].style.setProperty('--magnet-x', `0px`);
+            this.papers[index].style.setProperty('--magnet-y', `0px`);
+        }
+    }
+
+    // --- INITIALIZE THE FOLDER ---
+    new Folder('#folder-container', {
+        items: ['<h3>Project A</h3><p>Details...</p>', '<h3>Project B</h3>', '<h3>Project C</h3>']
+    });
+
+    </script>
+</body>
+</html>
+

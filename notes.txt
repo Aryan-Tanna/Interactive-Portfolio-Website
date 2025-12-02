@@ -47,3 +47,8 @@ CDN choice matters: Skypack, esm.sh work for ES modules; jsDelivr/unpkg need spe
 ES modules in browser: Use <script type="module"> and import from CDN URLs that support it
 Inline code can be simpler than managing multiple file dependencies when CDN access is unreliable
 The light rays now work because OGL loads correctly from Skypack CDN as an ES module, and all the shader/rendering code executes immediately after in the same module scope.
+
+
+Cause of the freeze (most likely)
+Nested scroll trap from fixed heights/layout: body was set to display: flex and main.demo-content/sections used viewport-fixed heights. This can create an inner scroll container that conflicts with smooth/scrubbed animations when you scroll slowly, especially around the second section (#about / #tech-stack-section).
+Heavy scroll-scrub animation present: scroll float .js animates #scroll-float-heading with scrub: true. That’s fine, but any scroll trap or fixed-height container makes it feel like the page “freezes” when scrolling slowly.
